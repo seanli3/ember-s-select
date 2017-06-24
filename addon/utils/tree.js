@@ -4,7 +4,6 @@ const {
   A,
   get,
   isEmpty,
-  isPresent,
   ObjectProxy
 } = Ember;
 
@@ -38,20 +37,8 @@ export function buildTree(model, options) {
       isVisible: true
     };
 
-    // Alternative name for `id`
-    if (options.valueKey) {
-      child.id = get(node, options.valueKey);
-    }
-
-    // Alternative name for `name`
-    if (options.labelKey) {
-      child.name = get(node, options.labelKey);
-    }
-
-    // Decide if node is expanded
-    if (isPresent(options.isExpanded)) {
-      child.isExpanded = options.isExpanded;
-    }
+    child.id = get(node, options.valueKey || 'id');
+    child.name = get(node, options.labelKey || 'name');
 
     // Proxy options to keep model intact
     tree[get(child, 'id')] = ObjectProxy.create(child);

@@ -1,10 +1,10 @@
 {
-  "name": "ember-select",
-  "version": "0.3.0",
+  "name": "s-select",
+  "version": "0.0.1",
   "description": "Select component",
   "keywords": [
     "ember-addon",
-    "ember-select",
+    "s-select",
     "select",
     "dropdown",
     "selectize",
@@ -16,7 +16,7 @@
     "doc": "doc",
     "test": "tests"
   },
-  "repository": "https://github.com/btecu/ember-select",
+  "repository": "https://github.com/btecu/s-select",
   "scripts": {
     "build": "ember build",
     "start": "ember server",
@@ -24,12 +24,12 @@
   },
   "dependencies": {
     "ember-cli-babel": "^6.0.0",
-    "ember-cli-htmlbars": "^1.1.1",
-    "ember-message-bus": "0.3.3"
+    "ember-cli-htmlbars": "^1.1.1"
   },
   "devDependencies": {
     "broccoli-asset-rev": "^2.4.5",
     "ember-cli": "2.13.2",
+    "ember-cli-code-coverage": "^0.3.12",
     "ember-cli-dependency-checker": "^1.3.0",
     "ember-cli-eslint": "^3.0.0",
     "ember-cli-htmlbars-inline-precompile": "^0.4.0",
@@ -42,6 +42,7 @@
     "ember-export-application-global": "^2.0.0",
     "ember-load-initializers": "^1.0.0",
     "ember-resolver": "^4.0.0",
+    "ember-sinon": "^0.7.0",
     "ember-source": "~2.13.0",
     "eslint-plugin-ember-suave": "^1.0.0",
     "loader.js": "^4.2.3"

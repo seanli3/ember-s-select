@@ -6,19 +6,38 @@ moduleForComponent('select-dropdown-option', 'Integration | Component | select d
 });
 
 test('it renders', function(assert) {
-  // Set any properties with this.set('myProperty', 'value');
-  // Handle any actions with this.on('myAction', function(val) { ... });
+  this.set('model', { name: 'model' });
+  this.render(hbs`{{select-dropdown-option model=model}}`);
 
-  this.render(hbs`{{select-dropdown-option}}`);
+  assert.equal(this.$().text().trim(), 'model');
+  assert.ok(this.$('div').hasClass('es-option'));
+  assert.notOk(this.$('div').hasClass('es-highlight'));
+});
 
-  assert.equal(this.$().text().trim(), '');
+test('es-highlight class is binded with model.isSelected', function(assert) {
+  this.set('model', { name: 'model', isSelected: true });
+  this.render(hbs`{{select-dropdown-option model=model}}`);
 
-  // Template block usage:
-  this.render(hbs`
-    {{#select-dropdown-option}}
-      template block text
-    {{/select-dropdown-option}}
-  `);
+  assert.equal(this.$().text().trim(), 'model');
+  assert.ok(this.$('div').hasClass('es-highlight'));
+});
 
-  assert.equal(this.$().text().trim(), 'template block text');
+test('click on component triggers select event', function(assert) {
+  assert.expect(1);
+  this.set('model', { name: 'model' });
+  this.on('onSelect', (model) => {
+    assert.equal(model, this.get('model'));
+  });
+  this.render(hbs`{{select-dropdown-option model=model select=(action "onSelect")}}`);
+  this.$('div').click();
+});
+
+test('mouseEnter on component triggers hover event', function(assert) {
+  assert.expect(1);
+  this.set('model', { name: 'model' });
+  this.on('onHover', (model) => {
+    assert.equal(model, this.get('model'));
+  });
+  this.render(hbs`{{select-dropdown-option model=model hover=(action "onHover")}}`);
+  this.$('div').trigger('mouseenter');
 });

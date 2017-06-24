@@ -2,19 +2,23 @@ import Ember from 'ember';
 import layout from '../templates/components/select-dropdown-option';
 
 const {
-  Component
+  Component,
+  computed
 } = Ember;
 
 export default Component.extend({
   layout,
   classNames: ['es-option'],
   classNameBindings: ['model.isSelected:es-highlight'],
+  attributeBindings: ['hidden'],
+
+  hidden: computed.not('model.isVisible'),
 
   click() {
-    this.attrs.select(this.get('model'));
+    this.get('select')(this.get('model'));
   },
 
   mouseEnter() {
-    this.attrs.hover(this.get('model'));
+    this.get('hover')(this.get('model'));
   }
 });

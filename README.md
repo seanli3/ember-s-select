@@ -1,4 +1,4 @@
-# ember-select
+# s-select
 Ready to use and extensible select component
 
 <details>
@@ -8,7 +8,7 @@ Existing components either do too much or too little.
 I wanted a solution that would work for most cases, while still allows extensibility.
 
 Some issues and dislikes of existing solutions:
- - `ember-select-box`
+ - `s-select-box`
     * no css, have to style it
     * too abstract, over 50 files
     * multiple ways to do the same (compose, extend, create)
@@ -33,7 +33,7 @@ Size difference based on `Ember 2.8`:
 
 |                       | CSS     | CSS gzip | JS        | JS gzip  | Total gzip | Diff gzip |
 |-----------------------|---------|----------|-----------|----------|------------|-----------|
-| `ember-select`        | 2.26 KB | 837 B    | 27.63 KB  | 4.82 KB  | 4.83 KB    | -         |
+| `s-select`        | 2.26 KB | 837 B    | 27.63 KB  | 4.82 KB  | 4.83 KB    | -         |
 | `ember-select-box`    | 0       | 0        | 47.25 KB  | 6.27 KB  | 6.27 KB    | +30%      |
 | `ember-cli-selectize` | 9.06 KB | 1.91 KB  | 56.29 KB  | 16.58 KB | 18.49 KB   | +282%     |
 | `ember-power-select`  | 6.07 KB | 1.27 KB  | 160.13 KB | 31.49 KB | 32.76 KB   | +578%     |
@@ -45,7 +45,7 @@ ember 2.8
  - vendor-d41d8cd98f00b204e9800998ecf8427e.css: 0 B
  - vendor-e837a5027df7ab84378241e40df98e4f.js: 656.33 KB (175.75 KB gzipped)
 
-ember-select
+s-select
  - size-2f65552abd00039f0d5bfa9d0e7a7dcf.js: 5.09 KB (1.25 KB gzipped)
  - size-d41d8cd98f00b204e9800998ecf8427e.css: 0 B
  - vendor-26fa5313284eb3f6427de885adb3c822.js: 682.69 KB (180.47 KB gzipped
@@ -75,7 +75,7 @@ ember-power-select
 ## Installation
 
 ```bash
-ember install ember-select
+ember install s-select
 ```
 
 
@@ -83,12 +83,12 @@ ember install ember-select
 Basic example:
 
 ```handlebars
-{{x-select model=options onSelect=(action 'select')}}
+{{s-select model=options onSelect=(action 'select')}}
 ```
 
 Group example (`id` / `name` properties):
 ```handlebars
-{{x-select model=groups value=value
+{{s-select model=groups value=value
   labelKey='name' valueKey='id'
   dropdown='select-dropdown-group'
   onSelect=(action 'select')}}

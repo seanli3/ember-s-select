@@ -1,4 +1,4 @@
-<div class="es-control">
+<div class="es-control {{controlClass}}">
   <div class="es-input" {{action 'focus'}}>
     {{#if hasValues}}
       <span class="es-selections">
@@ -12,10 +12,10 @@
 
     <input type="text"
       autocomplete="off"
+      disabled={{disabled}}
       autofocus={{autofocus}}
       placeholder={{unless hasValues placeholder ''}}
       readonly={{unless canSearch 'readonly'}}
-
       oninput={{action 'change' value='target.value'}}
       onkeydown={{action 'keypress'}}
       onfocus={{action 'focus'}}
@@ -35,12 +35,11 @@
   {{/if}}
 </div>
 
-{{#if isOpen}}
-  <div class="es-options">
-    {{component dropdown
-      model=model token=token values=values
-      labelKey=labelKey valueKey=valueKey
-      freeText=freeText shouldFilter=shouldFilter
-      select=(action 'select')}}
-  </div>
-{{/if}}
+<div class="es-options" hidden={{hideDropdown}}>
+  {{component dropdown
+    model=model token=token values=values
+    labelKey=labelKey valueKey=valueKey
+    shouldFilter=shouldFilter
+    keyEvent=keyEvent
+    select=(action 'select')}}
+</div>

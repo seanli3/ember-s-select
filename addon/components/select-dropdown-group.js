@@ -14,9 +14,8 @@ export default SelectDropdown.extend({
   groups: null,
   list: null,
 
-  didReceiveAttrs() {
+  init() {
     this._super(...arguments);
-
     // Tree built in extended component
     let groups = this.get('list');
     let list = getDescendents(groups);
@@ -47,11 +46,11 @@ export default SelectDropdown.extend({
       });
   },
 
-  upDownKeys(selected, event) {
+  upDownKeys(selected, keyEvent) {
     let list = this.get('list')
       .filterBy('isVisible')
       .filter(el => isPresent(get(el, 'parentId')));
 
-    this.move(list, selected, event.keyCode);
+    this.move(list, selected, keyEvent.which);
   }
 });

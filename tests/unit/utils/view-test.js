@@ -5,6 +5,6 @@ module('Unit | Utility | view');
 
 // Replace this with your real tests.
 test('it works', function(assert) {
-  let result = view();
+  let result = view.bringInView;
   assert.ok(result);
 });

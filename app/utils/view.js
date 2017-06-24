@@ -1,1 +1,1 @@
-export { default } from 'ember-select/utils/view';
+export { default } from 's-select/utils/view';

@@ -7,7 +7,7 @@ const {
   Component,
   computed,
   get,
-  inject,
+  observer,
   isEmpty,
   isNone,
   isPresent,
@@ -17,24 +17,20 @@ const {
 export default Component.extend({
   layout,
   list: null,
-
-  messageBus: inject.service(),
+  keyEvent: null,
 
   init() {
     this._super(...arguments);
-
-    this.get('messageBus').subscribe('select-key', this, this.keys);
-  },
-
-  didReceiveAttrs() {
-    this._super(...arguments);
-
     let options = this.getProperties('valueKey', 'labelKey');
     let model = this.get('model');
     let list = buildTree(model, options);
 
     this.setProperties({ list });
   },
+
+  keyPressed: observer('keyEvent', function() {
+    this.keys.call(this, this.get('keyEvent'));
+  }),
 
   options: computed('token', 'model.[]', 'values.[]', function() {
     if (this.get('shouldFilter')) {
@@ -50,7 +46,6 @@ export default Component.extend({
       if (selected) {
         selected.set('isSelected', false);
       }
-
       this.set('selected', node);
       node.set('isSelected', true);
     },
@@ -81,17 +76,21 @@ export default Component.extend({
     }
 
     // Mark first visible element as selected
-    if (!this.get('freeText') && isPresent(token) && list.some(x => get(x, 'isVisible'))) {
+    if (isPresent(token) && list.some(x => get(x, 'isVisible'))) {
       let [firstVisible] = list.filter(x => get(x, 'isVisible'));
       firstVisible.set('isSelected', true);
       this.set('selected', firstVisible);
     }
   },
 
-  keys(event) {
+  keys(keyEvent) {
+    if (!keyEvent || !keyEvent.which) {
+      return;
+    }
+
     let selected = this.get('selected');
 
-    switch (event.keyCode) {
+    switch (keyEvent.which) {
       case 9: // TAB
       case 13: // Enter
         this.tabEnterKeys(selected);
@@ -99,12 +98,12 @@ export default Component.extend({
 
       case 38: // Up
       case 40: // Down
-        this.upDownKeys(selected, event);
+        this.upDownKeys(selected, keyEvent);
         break;
     }
   },
 
-  // Prevent event bubbling up
+  // Prevent mousedown event from stealing focus from input
   mouseDown(event) {
     event.preventDefault();
   },
@@ -119,7 +118,7 @@ export default Component.extend({
       return;
     }
 
-    let index = list.indexOf(selected);
+    let index = selected ? list.findIndex(node => selected.id === node.id) : -1;
     let node;
 
     if (direction === 38) {
@@ -130,7 +129,7 @@ export default Component.extend({
       if (isNone(node)) {
         node = list[list.length - 1];
       }
-    } else if (direction === 40) {
+    } else {
       if (index !== -1) {
         node = list[index + 1];
       }
@@ -139,7 +138,6 @@ export default Component.extend({
         node = list[0];
       }
     }
-
     this.set('selected', node);
     node.set('isSelected', true);
 
@@ -155,13 +153,11 @@ export default Component.extend({
   tabEnterKeys(selected) {
     if (selected && this.get('list').includes(selected)) {
       this.send('select', selected);
-    } else if (this.get('freeText')) {
-      this.attrs.select(this.get('token'));
     }
   },
 
-  upDownKeys(selected, event) {
+  upDownKeys(selected, keyEvent) {
     let list = this.get('list').filterBy('isVisible');
-    this.move(list, selected, event.keyCode);
+    this.move(list, selected, keyEvent.which);
   }
 });

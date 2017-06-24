@@ -1,1 +1,1 @@
-export { default } from 'ember-select/components/select-dropdown-group';
+export { default } from 's-select/components/select-dropdown-group';
