@@ -155,13 +155,13 @@ test('click on down arrow toggles the dropdown', function(assert) {
       labelKey="label"}}`);
 
   assert.equal(this.$('div.es-group').length, 2);
-  assert.ok(this.$('div.es-options').attr('hidden'));
+  assert.ok(this.$('div.es-options-container').attr('hidden'));
 
   this.$('span.es-arrow').trigger('mousedown');
-  assert.notOk(this.$('div.es-options').attr('hidden'));
+  assert.notOk(this.$('div.es-options-container').attr('hidden'));
 
   this.$('span.es-arrow').trigger('mousedown');
-  assert.ok(this.$('div.es-options').attr('hidden'));
+  assert.ok(this.$('div.es-options-container').attr('hidden'));
 });
 
 test('change input opens the dropdown', function(assert) {
@@ -170,10 +170,10 @@ test('change input opens the dropdown', function(assert) {
     {{s-select
       model=groups
       labelKey="label"}}`);
-  assert.ok(this.$('div.es-options').attr('hidden'));
+  assert.ok(this.$('div.es-options-container').attr('hidden'));
   this.$('input').val('a');
   this.$('input').trigger('input');
-  assert.notOk(this.$('div.es-options').attr('hidden'));
+  assert.notOk(this.$('div.es-options-container').attr('hidden'));
 });
 
 test('dropdown opens on focus when canSearch=false', function(assert) {
@@ -185,9 +185,9 @@ test('dropdown opens on focus when canSearch=false', function(assert) {
       labelKey="label"
       canSearch=false}}`);
 
-  assert.ok(this.$('div.es-options').attr('hidden'));
+  assert.ok(this.$('div.es-options-container').attr('hidden'));
   this.$('input').trigger('focus');
-  assert.notOk(this.$('div.es-options').attr('hidden'));
+  assert.notOk(this.$('div.es-options-container').attr('hidden'));
 });
 
 test('dropdown does not open on focus when canSearch=true', function(assert) {
@@ -198,7 +198,7 @@ test('dropdown does not open on focus when canSearch=true', function(assert) {
       value="a"
       labelKey="label"}}`);
   this.$('input').trigger('focus');
-  assert.ok(this.$('div.es-options').attr('hidden'));
+  assert.ok(this.$('div.es-options-container').attr('hidden'));
 });
 
 test('autofocus is bind with input', function(assert) {
@@ -225,12 +225,12 @@ test('no dropdown when disabled is true', function(assert) {
       disabled=disabled}}`);
 
   this.$('input').trigger('focus');
-  assert.ok(this.$('div.es-options').attr('hidden'));
+  assert.ok(this.$('div.es-options-container').attr('hidden'));
   assert.ok(this.$('input').attr('disabled'));
 
   this.set('disabled', false);
   this.$('input').trigger('focus');
-  assert.notOk(this.$('div.es-options').attr('hidden'));
+  assert.notOk(this.$('div.es-options-container').attr('hidden'));
   assert.notOk(this.$('input').attr('disabled'));
 });
 
@@ -245,9 +245,9 @@ test('dropdown should keep open when attribute is updated', function(assert) {
 
   this.$('input').val('banana');
   this.$('input').trigger('input');
-  assert.notOk(this.$('div.es-options').attr('hidden'));
+  assert.notOk(this.$('div.es-options-container').attr('hidden'));
   this.set('value', 'banana');
-  assert.notOk(this.$('div.es-options').attr('hidden'));
+  assert.notOk(this.$('div.es-options-container').attr('hidden'));
 });
 
 test('input values should be updated when value attribute is updated to be different', function(assert) {
@@ -342,14 +342,14 @@ test('ESC clears input in search mode', function(assert) {
   this.$('input').trigger($event('keydown', { which: 27 }));
 
   assert.equal(this.$('input').val(), '');
-  assert.ok(this.$('div.es-options').attr('hidden'));
+  assert.ok(this.$('div.es-options-container').attr('hidden'));
 
   this.set('canSearch', false);
   this.$('input').val('ba');
   this.$('input').trigger('input');
   this.$('input').trigger($event('keydown', { which: 27 }));
   assert.equal(this.$('input').val(), 'ba');
-  assert.ok(this.$('div.es-options').attr('hidden'));
+  assert.ok(this.$('div.es-options-container').attr('hidden'));
 });
 
 test('UP arrow expands dropdown', function(assert) {
@@ -361,7 +361,7 @@ test('UP arrow expands dropdown', function(assert) {
       labelKey="label"}}`);
 
   this.$('input').trigger($event('keydown', { which: 38 }));
-  assert.notOk(this.$('div.es-options').attr('hidden'));
+  assert.notOk(this.$('div.es-options-container').attr('hidden'));
 });
 
 test('DOWN arrow expands dropdown', function(assert) {
@@ -373,9 +373,9 @@ test('DOWN arrow expands dropdown', function(assert) {
       labelKey="label"}}`);
 
   this.$('input').trigger($event('keydown', { which: 40 }));
-  assert.notOk(this.$('div.es-options').attr('hidden'));
+  assert.notOk(this.$('div.es-options-container').attr('hidden'));
   this.$('input').trigger($event('keydown', { which: 40 }));
-  assert.notOk(this.$('div.es-options').attr('hidden'));
+  assert.notOk(this.$('div.es-options-container').attr('hidden'));
 });
 
 test('Click on value should remove it from values', function(assert) {
@@ -513,7 +513,7 @@ test('Dropdown is not opened when input is cleared', function(assert) {
     valueKey="value"}}`);
 
   this.$('input').trigger('input');
-  assert.ok(this.$('.es-options').attr('hidden'));
+  assert.ok(this.$('.es-options-container').attr('hidden'));
 });
 
 test('Click on object option should select it', function(assert) {

@@ -18,6 +18,7 @@ export default Component.extend({
   layout,
   list: null,
   keyEvent: null,
+  classNames: ['es-options'],
 
   init() {
     this._super(...arguments);
