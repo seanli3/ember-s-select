@@ -11,3 +11,13 @@ test('mouseDown event handler calls preventDefault', function(assert) {
   component.mouseDown(event);
   assert.ok(event.preventDefault.calledOnce);
 });
+
+test('Abnormal keyEvent should be able be ignored', function(assert) {
+  let component = this.subject();
+  sinon.spy(component, 'tabEnterKeys');
+  sinon.spy(component, 'upDownKeys');
+  component.keys(null);
+  component.keys({});
+  assert.ok(component.tabEnterKeys.notCalled);
+  assert.ok(component.upDownKeys.notCalled);
+});

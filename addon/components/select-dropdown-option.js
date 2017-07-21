@@ -10,7 +10,7 @@ export default Component.extend({
   layout,
   classNames: ['es-option'],
   classNameBindings: ['model.isSelected:es-highlight'],
-  attributeBindings: ['hidden'],
+  attributeBindings: ['hidden', 'model.name:title'],
 
   hidden: computed.not('model.isVisible'),
 

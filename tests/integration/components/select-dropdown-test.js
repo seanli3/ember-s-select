@@ -148,9 +148,20 @@ test('UP and DWON keypress moves selection', function(assert) {
   assert.ok(this.$('.es-option:last').hasClass('es-highlight'));
 });
 
-test('Click on option should trigger select event', function(assert) {
+test('UP key should select the last option', function(assert) {
   this.set('items', listofItems);
   this.set('keyEvent', null);
+  this.render(hbs`
+    {{select-dropdown
+      keyEvent=keyEvent
+      model=items}}`);
+
+  this.set('keyEvent', { which: 38 });
+  assert.ok(this.$('.es-option:last').hasClass('es-highlight'));
+});
+
+test('Click on option should trigger select event', function(assert) {
+  this.set('items', listofItems);
   this.on('select', option => {
     assert.equal(option, 'Naranja');
   });

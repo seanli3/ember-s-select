@@ -6,7 +6,7 @@ moduleForComponent('s-select', 'Integration | Component | s select', {
   integration: true
 });
 
-const { $ } = Ember;
+const { $, run } = Ember;
 
 const $event = $.Event;
 
@@ -448,6 +448,7 @@ test('Click on option sets value on a list of items', function(assert) {
 test('Search token/input value is set when selected in single select mode', function(assert) {
   assert.expect(1);
 
+  let async = assert.async();
   this.set('list', listofObjects);
 
   this.render(hbs`{{s-select
@@ -458,7 +459,11 @@ test('Search token/input value is set when selected in single select mode', func
   this.$('span.es-arrow').trigger('mousedown');
   this.$('.es-option')[3].click();
 
-  assert.equal(this.$('input').val(), 'Fiat');
+  Ember.run.next(() => {
+    assert.equal(this.$('input').val(), 'Fiat');
+    async();
+  });
+
 });
 
 test('Search token/input value is cleared when selected in multiple select mode', function(assert) {
@@ -487,6 +492,7 @@ test('Blur/Clear reset input to value when required=true in single select mode',
   this.render(hbs`{{s-select
     model=list
     labelKey="label"
+    valueKey="value"
     value=value
     required=true
     valueKey="value"}}`);
@@ -494,11 +500,30 @@ test('Blur/Clear reset input to value when required=true in single select mode',
   this.$('input').trigger('input');
   this.$('input').trigger('blur');
 
-  assert.equal(this.$('input').val(), this.get('value').label);
-
+  assert.equal(this.$('input').val(), listofObjects[1].label);
   this.$('input').val('test');
   this.$('.es-clear-zone').click();
-  assert.equal(this.$('input').val(), this.get('value').label);
+  assert.equal(this.$('input').val(), listofObjects[1].label);
+});
+
+test('When freeText is enabled, blur will keep the input value', function(assert) {
+  assert.expect(1);
+
+  this.set('list', listofObjects);
+  this.set('value', listofObjects[1]);
+
+  this.render(hbs`{{s-select
+    model=list
+    freeText=true
+    labelKey="label"
+    valueKey="value"
+    value=value
+    valueKey="value"}}`);
+  this.$('input').val('test');
+  this.$('input').trigger('input');
+  this.$('input').trigger('blur');
+
+  assert.equal(this.$('input').val(), 'test');
 });
 
 test('Dropdown is not opened when input is cleared', function(assert) {
@@ -537,9 +562,8 @@ test('Click on object option should select it', function(assert) {
 });
 
 test('Click on group object option should select it', function(assert) {
-  let value = null;
   this.set('list', groups);
-  this.set('value', value);
+  this.set('value', null);
   this.on('select', option => {
     assert.equal(option, 102);
   });
@@ -554,4 +578,121 @@ test('Click on group object option should select it', function(assert) {
 
   this.$('input').trigger('input');
   this.$('.es-option:eq(1)').click();
+
+  let async = assert.async();
+  run.next(() => {
+    assert.equal(this.get('value'), null);
+    async();
+  });
+});
+
+test('Press ENTER when should select the option', function(assert) {
+  this.set('list', listofItems);
+  this.on('select', option => {
+    assert.equal(option, 'Azul');
+  });
+
+  this.render(hbs`{{s-select
+    model=list
+    canSearch=false
+    onSelect=(action 'select')}}`);
+
+  this.$('input').trigger($event('keydown', { which: 40 }));
+  this.$('input').trigger($event('keydown', { which: 40 }));
+  this.$('input').trigger($event('keydown', { which: 40 }));
+  this.$('input').trigger($event('keydown', { which: 13 }));
+});
+
+test('Press TAB when should select the option', function(assert) {
+  this.set('list', listofItems);
+  this.on('select', option => {
+    assert.equal(option, 'Amarillo');
+  });
+
+  this.render(hbs`{{s-select
+    model=list
+    canSearch=false
+    onSelect=(action 'select')}}`);
+
+  this.$('input').trigger($event('keydown', { which: 40 }));
+  this.$('input').trigger($event('keydown', { which: 40 }));
+  this.$('input').trigger($event('keydown', { which: 9 }));
+});
+
+test('Click on group object option should update value', function(assert) {
+  this.set('list', groups);
+  this.set('value', null);
+  let async = assert.async();
+
+  this.render(hbs`{{s-select
+    model=list
+    labelKey="label"
+    value=value
+    required=true
+    valueKey="value"
+    onSelect=(action (mut value))}}`);
+
+  this.$('input').trigger('input');
+  this.$('.es-option:eq(1)').click();
+  run.next(() => {
+    assert.equal(this.get('value'), 102);
+    async();
+  });
+});
+
+test('onSelect event handler should not be called in freetext mode when input is empty', function(assert) {
+  assert.expect(0);
+  this.set('list', listofItems);
+  this.on('select', () => {
+    assert.ok(false);
+  });
+
+  this.render(hbs`{{s-select
+    model=list
+    canSearch=false
+    freeText=true
+    onSelect=(action 'select')}}`);
+
+  this.$('input').val('');
+  this.$('input').trigger('input');
+  this.$('input').trigger($event('keydown', { which: 13 }));
+});
+
+test('onCreate event handler should be called in freetext mode when input is not empty', function(assert) {
+  assert.expect(1);
+  this.set('list', listofItems);
+  this.on('create', option => {
+    assert.equal(option, 'test');
+  });
+
+  this.render(hbs`{{s-select
+    model=list
+    canSearch=false
+    freeText=true
+    onCreate=(action 'create')}}`);
+
+  this.$('input').val('test');
+  this.$('input').trigger('input');
+  this.$('input').trigger($event('keydown', { which: 13 }));
+});
+
+test('onSelect event handler should be called in freetext mode when input is not empty', function(assert) {
+  assert.expect(1);
+  let async = assert.async();
+
+  this.set('list', listofItems);
+  this.on('select', option => {
+    assert.equal(option, 'test');
+    async();
+  });
+
+  this.render(hbs`{{s-select
+    model=list
+    canSearch=false
+    freeText=true
+    onSelect=(action 'select')}}`);
+
+  this.$('input').val('test');
+  this.$('input').trigger('input');
+  this.$('input').trigger($event('keydown', { which: 13 }));
 });

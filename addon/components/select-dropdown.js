@@ -11,29 +11,27 @@ const {
   isEmpty,
   isNone,
   isPresent,
-  run
+  run,
+  on
 } = Ember;
 
 export default Component.extend({
   layout,
   list: null,
-  keyEvent: null,
   classNames: ['es-options'],
 
-  init() {
-    this._super(...arguments);
+  modelChanged: on('init', observer('model', function() {
     let options = this.getProperties('valueKey', 'labelKey');
     let model = this.get('model');
     let list = buildTree(model, options);
-
     this.setProperties({ list });
-  },
+  })),
 
   keyPressed: observer('keyEvent', function() {
     this.keys.call(this, this.get('keyEvent'));
   }),
 
-  options: computed('token', 'model.[]', 'values.[]', function() {
+  options: computed('token', 'model.[]', 'values.[]', 'shouldFilter', function() {
     if (this.get('shouldFilter')) {
       this.filterModel();
     }
@@ -77,7 +75,7 @@ export default Component.extend({
     }
 
     // Mark first visible element as selected
-    if (isPresent(token) && list.some(x => get(x, 'isVisible'))) {
+    if (!this.get('freeText') && isPresent(token) && list.some(x => get(x, 'isVisible'))) {
       let [firstVisible] = list.filter(x => get(x, 'isVisible'));
       firstVisible.set('isSelected', true);
       this.set('selected', firstVisible);
@@ -154,6 +152,8 @@ export default Component.extend({
   tabEnterKeys(selected) {
     if (selected && this.get('list').includes(selected)) {
       this.send('select', selected);
+    } else if (this.get('freeText')) {
+      this.attrs.select(this.get('token'));
     }
   },
 

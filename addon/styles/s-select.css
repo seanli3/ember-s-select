@@ -117,7 +117,8 @@
 
 .es-options-container {
   left: 0;
-  padding: inherit;
+  padding-left: inherit;
+  padding-right: 0;
   z-index: 10;
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
   box-sizing: border-box;
@@ -181,4 +182,21 @@
 ::-ms-clear,
 ::-ms-reveal {
   display: none;
+}
+
+table .s-select {
+  display: inline-flex;
+}
+table .es-control {
+  display: block;
+  text-align: right;
+}
+table .es-input {
+  width: calc(100% - 45px);
+  display: inline-flex;
+  float: left;
+}
+table .es-arrow-zone,
+table .es-clear-zone {
+  display: inline-block;
 }

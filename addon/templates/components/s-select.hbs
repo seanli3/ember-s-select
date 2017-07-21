@@ -13,6 +13,7 @@
     <input type="text"
       autocomplete="off"
       disabled={{disabled}}
+      required={{required}}
       autofocus={{autofocus}}
       placeholder={{unless hasValues placeholder ''}}
       readonly={{unless canSearch 'readonly'}}
@@ -41,5 +42,8 @@
     labelKey=labelKey valueKey=valueKey
     shouldFilter=shouldFilter
     keyEvent=keyEvent
+    freeText=freeText
+    optionClass=optionClass
+    groupClass=groupClass
     select=(action 'select')}}
 </div>

@@ -6,7 +6,9 @@ import { getDescendents } from '../utils/tree';
 const {
   computed,
   get,
-  isPresent
+  isPresent,
+  on,
+  observer
 } = Ember;
 
 export default SelectDropdown.extend({
@@ -14,16 +16,16 @@ export default SelectDropdown.extend({
   groups: null,
   list: null,
 
-  init() {
+  modelChanged: on('init', observer('model', function() {
     this._super(...arguments);
     // Tree built in extended component
     let groups = this.get('list');
     let list = getDescendents(groups);
 
     this.setProperties({ list, groups });
-  },
+  })),
 
-  options: computed('token', 'model.[]', 'values.[]', function() {
+  options: computed('token', 'model.[]', 'values.[]', 'shouldFilter', function() {
     if (this.get('shouldFilter')) {
       this.filterModel();
     }

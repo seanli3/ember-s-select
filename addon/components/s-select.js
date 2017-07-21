@@ -20,12 +20,13 @@ export default Component.extend({
   classNames: ['s-select'],
   classNameBindings: [
     'isOpen:es-open', 'isFocus:es-focus',
-    'canSearch::es-select', 'multiple:es-multiple'
+    'canSearch::s-select', 'multiple:es-multiple'
   ],
 
   autofocus: false,
   canSearch: true,
   disabled: false,
+  freeText: false,
   dropdown: 'select-dropdown',
   isDirty: false,
   isFocus: false,
@@ -114,7 +115,8 @@ export default Component.extend({
     blur() {
       if (this.get('isDirty')) {
         // Clear unallowed input in strict single mode
-        this.setOption('', false, !this.get('multiple'));
+        let option = this.get('freeText') && this.get('token') || '';
+        this.setOption(option, false, !this.get('multiple'));
       }
 
       this.setProperties({
@@ -162,7 +164,6 @@ export default Component.extend({
 
     keypress(e) {
       let isOpen = this.get('isOpen');
-      this.set('keyEvent', e);
 
       switch (e.which) {
         case 8: { // Backspace
@@ -174,6 +175,10 @@ export default Component.extend({
           }
           break;
         }
+        case 9: // TAB
+        case 13: // Enter
+          this.set('keyEvent', e);
+          break;
         case 27: // ESC
           if (this.get('canSearch') && this.get('hasInput')) {
             this.send('clear');
@@ -183,7 +188,9 @@ export default Component.extend({
           break;
         case 38: // Up Arrow
         case 40: // Down Arrow
-          if (!isOpen) {
+          if (isOpen) {
+            this.set('keyEvent', e);
+          } else {
             this.set('isOpen', true);
           }
           e.preventDefault();
@@ -200,8 +207,17 @@ export default Component.extend({
     },
 
     select(option, selected) {
-      let valid = isPresent(option);
-      valid && this.setOption(option, selected, true);
+      if (!isPresent(option)) {
+        return;
+      }
+
+      let hasOnCreate = isPresent(this.attrs.onCreate);
+      let notifySelection = selected || !hasOnCreate;
+
+      !selected && hasOnCreate && this.attrs.onCreate(option);
+      run.next(() => {
+        this.setOption(option, selected, notifySelection);
+      });
     }
   },
 
@@ -265,7 +281,7 @@ export default Component.extend({
     this.set('isDirty', false);
 
     if (notify) {
-      this.sendAction('onSelect', value, option, selected);
+      this.attrs.onSelect && this.attrs.onSelect(value, option, selected);
       this.set('isOpen', false);
     }
   }
