@@ -188,7 +188,7 @@ table .s-select {
   display: inline-flex;
 }
 table .es-control {
-  display: block;
+  display: block !important;
   text-align: right;
 }
 table .es-input {
