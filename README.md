@@ -1,5 +1,9 @@
 # s-select
-Ready to use and extensible select component
+Ready to use and extensible select component. This is a fork of [btecu/ember-select](https://github.com/btecu/ember-select).
+
+I like the idea of having a light-weight Ember Select AddOn which has a small API surface and basic styling. However, I need to use it in a commercial application and the original AddOn doesn't meet all my needs including: collapsible option group, Bootstrap style compatibility, and a more comstomizable styling. Also, coming from TDD background, the fact that the original AddOn has zero test coverage worries me a lot.
+
+So on top of the original AddOn, *ember-s-select* added better support for customized styles. I also fixed issues dropdown width, removed IE8 support (as it is hard to test and maintain), and most importantly, added tests so it is 100% test covered. I will add collapsible option group feature soon.
 
 <details>
   <summary>Why not use an existing solution?</summary>
@@ -83,15 +87,20 @@ ember install s-select
 Basic example:
 
 ```handlebars
-{{s-select model=options onSelect=(action 'select')}}
+{{s-select model=options value=value onSelect=(action 'select')}}
 ```
 
 Group example (`id` / `name` properties):
 ```handlebars
 {{s-select model=groups value=value
-  labelKey='name' valueKey='id'
+  labelKey='name' valueKey='id' value=value
   dropdown='select-dropdown-group'
   onSelect=(action 'select')}}
+```
+
+Note: *ember-s-select* does not mutate `value` by default, users can set the value in `onSelect` event handler or use the following syntax to explicity mutate value.
+```handlebars
+{{s-select model=options value=someValue onSelect=(action (mut someValue))}}
 ```
 
 
