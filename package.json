@@ -16,7 +16,7 @@
     "doc": "doc",
     "test": "tests"
   },
-  "repository": "https://github.com/btecu/s-select",
+  "repository": "https://github.com/shouhengli/ember-s-select",
   "scripts": {
     "build": "ember build",
     "start": "ember server",
