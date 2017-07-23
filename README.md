@@ -1,6 +1,8 @@
 # s-select
 Ready to use and extensible select component. This is a fork of [btecu/ember-select](https://github.com/btecu/ember-select).
 
+[![Build Status](https://travis-ci.org/shouhengli/ember-s-select.svg?branch=master)](https://travis-ci.org/shouhengli/ember-s-select)
+
 I like the idea of having a light-weight Ember Select AddOn which has a small API surface and basic styling. However, I need to use it in a commercial application and the original AddOn doesn't meet all my needs including: collapsible option group, Bootstrap style compatibility, and a more comstomizable styling. Also, coming from TDD background, the fact that the original AddOn has zero test coverage worries me a lot.
 
 So on top of the original AddOn, *ember-s-select* added better support for customized styles. I also fixed issues dropdown width, removed unnecessary dependency `ember-message-bus`, removed IE8 support (as it is hard to test and maintain), and most importantly, added tests so it is 100% test covered. I will add collapsible option group feature soon.
