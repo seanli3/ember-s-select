@@ -1,7 +1,7 @@
 # s-select
 Ready to use and extensible select component. This is a fork of [btecu/ember-select](https://github.com/btecu/ember-select).
 
-[![Build Status](https://travis-ci.org/shouhengli/ember-s-select.svg?branch=master)](https://travis-ci.org/shouhengli/ember-s-select)
+[![npm version](https://badge.fury.io/js/s-select.svg)](https://badge.fury.io/js/s-select)[![Build Status](https://travis-ci.org/shouhengli/ember-s-select.svg?branch=master)](https://travis-ci.org/shouhengli/ember-s-select)[![Ember Observer Score](https://emberobserver.com/badges/s-select.svg)](https://emberobserver.com/addons/s-select)[![Code Climate](https://codeclimate.com/github/shouhengli/ember-s-select/badges/gpa.svg)](https://codeclimate.com/github/https://codeclimate.com/github/shouhengli/ember-s-select)
 
 I like the idea of having a light-weight Ember Select AddOn which has a small API surface and basic styling. However, I need to use it in a commercial application and the original AddOn doesn't meet all my needs including: collapsible option group, Bootstrap style compatibility, and a more comstomizable styling. Also, coming from TDD background, the fact that the original AddOn has zero test coverage worries me a lot.
 
