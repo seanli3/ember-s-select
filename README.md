@@ -14,7 +14,7 @@ Existing components either do too much or too little.
 I wanted a solution that would work for most cases, while still allows extensibility.
 
 Some issues and dislikes of existing solutions:
- - `s-select-box`
+ - `ember-select-box`
     * no css, have to style it
     * too abstract, over 50 files
     * multiple ways to do the same (compose, extend, create)
