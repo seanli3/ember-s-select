@@ -1,6 +1,10 @@
 {{#each options as |group|}}
   {{#if group.isVisible}}
-    <div class="es-group {{groupClass}}" title="{{group.name}}">{{group.name}}</div>
+		{{#if canSelectGroup}}
+			<div class="es-group es-selectable {{if group.isSelected "es-highlight"}}" title="{{group.name}}" {{action "select" group}} {{action "hover" group on="mouseEnter"}}>{{group.name}}</div>
+		{{else}}
+			<div class="es-group" title="{{group.name}}">{{group.name}}</div>
+		{{/if}}
     {{#each group.children as |option|}}
       {{#if option.isVisible}}
         {{select-dropdown-option model=option class=optionClass

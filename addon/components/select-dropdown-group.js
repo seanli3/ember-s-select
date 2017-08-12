@@ -50,9 +50,10 @@ export default SelectDropdown.extend({
 
   upDownKeys(selected, keyEvent) {
     let list = this.get('list')
-      .filterBy('isVisible')
-      .filter(el => isPresent(get(el, 'parentId')));
-
+      .filterBy('isVisible');
+    if (!this.get('canSelectGroup')) {
+      list = list.filter(el => isPresent(get(el, 'parentId')));
+    }
     this.move(list, selected, keyEvent.which);
   }
 });

@@ -8,7 +8,7 @@ const {
 
 export default Component.extend({
   layout,
-  classNames: ['es-option'],
+  classNames: ['es-option', 'es-selectable'],
   classNameBindings: ['model.isSelected:es-highlight'],
   attributeBindings: ['hidden', 'model.name:title'],
 
