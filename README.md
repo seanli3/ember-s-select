@@ -86,15 +86,40 @@ ember install s-select
 ## Usage
 Basic example:
 
+```js
+let options = [
+  'Amarillo',
+  'Azul',
+  'Blanco',
+  'Naranja',
+  'Negro',
+  'Rojo',
+  'Rosa',
+  'Verde'
+]
+```
 ```handlebars
 {{s-select model=options value=value onSelect=(action 'select')}}
 ```
 
 Group example (`id` / `name` properties):
+```js
+let groups = [
+  { value: 0, label: 'Fruit' },
+  { value: 101, label: 'Banana', parentId: 0 },
+  { value: 102, label: 'Lemon', parentId: 0 },
+  { value: 103, label: 'Orange', parentId: 0},
+  { value: 104, label: 'Raspberry', parentId: 0 },
+  { value: 1, label: 'Vegetable' },
+  { value: 111, label: 'Cucumber', parentId: 1 },
+  { value: 112, label: 'Eggplant', parentId: 1 },
+  { value: 113, label: 'Garlic', parentId: 1 },
+  { value: 114, label: 'Onion', parentId: 1 }
+]
+```
 ```handlebars
 {{s-select model=groups value=value
   labelKey='name' valueKey='id' value=value
-  dropdown='select-dropdown-group'
   onSelect=(action 'select')}}
 ```
 
@@ -192,6 +217,10 @@ Accepts: `array`
 Array of selected values.  
 Note: Setting this will enable `multiple` selections.
 
+#### canSelectGroup
+Default: `false`  
+Accepts: `boolean`  
+Group elements are selectable when set to true
 
 ### Model structure
 The component accepts both flat and complex (objects) lists.

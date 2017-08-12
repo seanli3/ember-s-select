@@ -18,6 +18,17 @@ const groups = [
   { value: 114, label: 'Onion', parentId: 1 }
 ];
 
+const mixedGroups = [
+  { value: 0, label: 'Fruit' },
+  { value: 101, label: 'Banana', parentId: 0 },
+  { value: 102, label: 'Lemon', parentId: 0 },
+  { value: 103, label: 'Orange', parentId: 0 },
+  { value: 104, label: 'Raspberry', parentId: 0 },
+  { value: 1, label: 'Vegetable' },
+  { value: 111, label: 'Cucumber', parentId: 1 },
+  { value: 2, label: 'Others' }
+];
+
 test('it renders', function(assert) {
   this.render(hbs`{{select-dropdown-group}}`);
 
@@ -43,6 +54,64 @@ test('UP and DWON keypress moves selection', function(assert) {
   assert.ok(this.$('.es-option:first').hasClass('es-highlight'));
   this.set('keyEvent', { which: 38 });
   assert.ok(this.$('.es-option:last').hasClass('es-highlight'));
+});
+
+test('UP and DWON keypress moves selection correctly when canSelectGroup is set to true', function(assert) {
+  this.set('keyEvent', null);
+  this.set('groups', mixedGroups);
+  this.render(hbs`
+    {{select-dropdown-group
+      keyEvent=keyEvent
+      model=groups
+			canSelectGroup=true
+      labelKey="label"
+      valueKey="value"}}`);
+
+  this.set('keyEvent', { which: 40 });
+  assert.ok(this.$('.es-group:first').hasClass('es-highlight'));
+  this.set('keyEvent', { which: 40 });
+  assert.ok(this.$('.es-option:first').hasClass('es-highlight'));
+
+  this.set('keyEvent', { which: 38 });
+  assert.ok(this.$('.es-group:first').hasClass('es-highlight'));
+  this.set('keyEvent', { which: 38 });
+  assert.ok(this.$('.es-group:last').hasClass('es-highlight'));
+});
+
+test('Hover over group highlights it when canSelectGroup is set to true', function(assert) {
+  this.set('groups', mixedGroups);
+  this.render(hbs`
+    {{select-dropdown-group
+      keyEvent=keyEvent
+      model=groups
+			canSelectGroup=true
+      labelKey="label"
+      valueKey="value"}}`);
+
+  this.$('.es-group:eq(1)').trigger('mouseenter');
+  assert.ok(this.$('.es-group:eq(1)').hasClass('es-highlight'));
+
+  this.$('.es-group:eq(2)').trigger('mouseenter');
+  assert.notOk(this.$('.es-group:eq(1)').hasClass('es-highlight'));
+  assert.ok(this.$('.es-group:eq(2)').hasClass('es-highlight'));
+});
+
+test('Hover over group does not highlight it when canSelectGroup is not set', function(assert) {
+  assert.expect(2);
+
+  this.set('groups', mixedGroups);
+  this.render(hbs`
+    {{select-dropdown-group
+      keyEvent=keyEvent
+      model=groups
+      labelKey="label"
+      valueKey="value"}}`);
+
+  this.$('.es-group:eq(1)').trigger('mouseenter');
+  assert.notOk(this.$('.es-group:eq(1)').hasClass('es-highlight'));
+
+  this.$('.es-option:eq(1)').trigger('mouseenter');
+  assert.ok(this.$('.es-option:eq(1)').hasClass('es-highlight'));
 });
 
 test('Click on option should trigger select event', function(assert) {

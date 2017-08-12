@@ -45,6 +45,17 @@ const listofItems = [
   'Verde'
 ];
 
+const mixedGroups = [
+  { value: 0, label: 'Fruit' },
+  { value: 101, label: 'Banana', parentId: 0 },
+  { value: 102, label: 'Lemon', parentId: 0 },
+  { value: 103, label: 'Orange', parentId: 0 },
+  { value: 104, label: 'Raspberry', parentId: 0 },
+  { value: 1, label: 'Vegetable' },
+  { value: 111, label: 'Cucumber', parentId: 1 },
+  { value: 2, label: 'Others' }
+];
+
 test('it renders control classes correctly', function(assert) {
   this.render(hbs`{{s-select controlClass="form-control"}}`);
   assert.notOk(this.$('.ember-view').hasClass('form-control'));
@@ -97,6 +108,68 @@ test('list of objects are rendered correctly', function(assert) {
   $options.each((index, option) => {
     assert.equal(option.textContent.trim(), listofObjects[index].label);
   });
+});
+
+test('groups are selectable when "canSelectGroup" is true', function(assert) {
+  assert.expect(10);
+  this.set('groups', mixedGroups);
+  this.on('select', (value, option, selected)=>{
+    assert.equal(value, 2, 'selection value matches');
+    assert.deepEqual(option, { label: 'Others', value: 2 }, 'selection option matches');
+    assert.ok(selected, 'option is selected');
+  });
+  this.render(hbs`
+    {{s-select
+      model=groups
+			canSelectGroup=true
+			onSelect=(action "select")
+      labelKey="label"}}`);
+
+  let $groups = this.$('div.es-group');
+  assert.equal($groups.length, 3);
+  let firstGroup = this.$('div.es-group:eq(0)');
+  assert.equal(firstGroup.text().trim(), mixedGroups[0].label, 'label matches');
+  assert.ok(firstGroup.hasClass('es-selectable'), 'has "es-selectable" class');
+  let secondGroup = this.$('div.es-group:eq(1)');
+  assert.equal(secondGroup.text().trim(), mixedGroups[5].label, 'label matches');
+  assert.ok(secondGroup.hasClass('es-selectable'), 'has "es-selectable" class');
+  let thirdGroup = this.$('div.es-group:eq(2)');
+  assert.equal(thirdGroup.text().trim(), mixedGroups[7].label, 'label matches');
+  assert.ok(thirdGroup.hasClass('es-selectable'), 'has "es-selectable" class');
+
+  this.$('span.es-arrow').trigger('mousedown');
+  this.$('.es-group')[2].click();
+});
+
+test('groups are selectable when "canSelectGroup" is true', function(assert) {
+  assert.expect(10);
+  this.set('groups', mixedGroups);
+  this.on('select', (value, option, selected)=>{
+    assert.equal(value, 2, 'selection value matches');
+    assert.deepEqual(option, { label: 'Others', value: 2 }, 'selection option matches');
+    assert.ok(selected, 'option is selected');
+  });
+  this.render(hbs`
+    {{s-select
+      model=groups
+			canSelectGroup=true
+			onSelect=(action "select")
+      labelKey="label"}}`);
+
+  let $groups = this.$('div.es-group');
+  assert.equal($groups.length, 3);
+  let firstGroup = this.$('div.es-group:eq(0)');
+  assert.equal(firstGroup.text().trim(), mixedGroups[0].label, 'label matches');
+  assert.ok(firstGroup.hasClass('es-selectable'), 'has "es-selectable" class');
+  let secondGroup = this.$('div.es-group:eq(1)');
+  assert.equal(secondGroup.text().trim(), mixedGroups[5].label, 'label matches');
+  assert.ok(secondGroup.hasClass('es-selectable'), 'has "es-selectable" class');
+  let thirdGroup = this.$('div.es-group:eq(2)');
+  assert.equal(thirdGroup.text().trim(), mixedGroups[7].label, 'label matches');
+  assert.ok(thirdGroup.hasClass('es-selectable'), 'has "es-selectable" class');
+
+  this.$('span.es-arrow').trigger('mousedown');
+  this.$('.es-group')[2].click();
 });
 
 test('Ember ArrayProxy list is rendered correctly', function(assert) {
@@ -598,6 +671,27 @@ test('Press ENTER when should select the option', function(assert) {
     onSelect=(action 'select')}}`);
 
   this.$('input').trigger($event('keydown', { which: 40 }));
+  this.$('input').trigger($event('keydown', { which: 40 }));
+  this.$('input').trigger($event('keydown', { which: 40 }));
+  this.$('input').trigger($event('keydown', { which: 13 }));
+});
+
+test('Press ENTER when should select the group when canSelectGroup=true', function(assert) {
+  assert.expect(3);
+
+  this.set('list', mixedGroups);
+  this.on('select', (value, option, selected) => {
+    assert.equal(value, 0, 'selection value matches');
+    assert.deepEqual(option, { label: 'Fruit', value: 0 }, 'selection option matches');
+    assert.ok(selected, 'option is selected');
+  });
+
+  this.render(hbs`{{s-select
+    model=list
+    canSearch=false
+		canSelectGroup=true
+    onSelect=(action 'select')}}`);
+
   this.$('input').trigger($event('keydown', { which: 40 }));
   this.$('input').trigger($event('keydown', { which: 40 }));
   this.$('input').trigger($event('keydown', { which: 13 }));
