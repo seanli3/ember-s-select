@@ -34,17 +34,20 @@ export default SelectDropdown.extend({
   }),
 
   setVisibility(list, token) {
-    list
-      .filter(el => isPresent(get(el, 'parentId')))
+    let filtered = list;
+    if (!this.get('canSelectGroup')) {
+      filtered = filtered.filter(el => isPresent(get(el, 'parentId')));
+    }
+    filtered
       .filter(el => get(el, 'name').toLowerCase().indexOf(token) > -1)
       .forEach(el => {
         el.set('isVisible', true);
 
         // Mark parent visible
-        list
+        let parent = list
           .filter(x => x.id === get(el, 'parentId'))
-          .shift()
-          .set('isVisible', true);
+          .shift();
+        parent && parent.set('isVisible', true);
       });
   },
 

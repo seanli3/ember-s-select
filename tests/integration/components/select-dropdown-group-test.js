@@ -129,3 +129,38 @@ test('Click on option should trigger select event', function(assert) {
 
   this.$('.es-option:eq(1)').click();
 });
+
+test('should filter options when shouldFilter=true', function(assert) {
+  this.set('groups', groups);
+  this.set('token', null);
+  this.render(hbs`
+    {{select-dropdown-group
+      model=groups
+      token=token
+      shouldFilter=true
+      labelKey="label"
+      valueKey="value"}}`);
+  assert.equal(this.$('.es-group:not([hidden])').length, 2);
+  assert.equal(this.$('.es-option:not([hidden])').length, 8);
+  this.set('token', 'bana');
+  assert.equal(this.$('.es-group:not([hidden])').length, 1);
+  assert.equal(this.$('.es-option:not([hidden])').length, 1);
+});
+
+test('should filter options and groups when shouldFilter=true and canSelectGroup=true', function(assert) {
+  this.set('groups', mixedGroups);
+  this.set('token', null);
+  this.render(hbs`
+    {{select-dropdown-group
+      model=groups
+      token=token
+      shouldFilter=true
+      canSelectGroup=true
+      labelKey="label"
+      valueKey="value"}}`);
+  assert.equal(this.$('.es-group:not([hidden])').length, 3);
+  assert.equal(this.$('.es-option:not([hidden])').length, 5);
+  this.set('token', 'others');
+  assert.equal(this.$('.es-group:not([hidden])').length, 1);
+  assert.equal(this.$('.es-option:not([hidden])').length, 0);
+});
